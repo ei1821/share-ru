@@ -1,5 +1,8 @@
 FROM python:3.10
 ENV PYTHONUNBUFFERED 1
+
+RUN apt update
+
 RUN mkdir /backend
 WORKDIR /backend
 ADD requirements.txt /backend/
