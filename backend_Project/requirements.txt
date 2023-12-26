@@ -5,3 +5,5 @@ psycopg2
 mysqlclient
 django-mysql
 django-cors-headers
+djangorestframework_simplejwt
+djoser
