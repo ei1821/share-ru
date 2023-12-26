@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import RegexValidator, slug_re
 
 
 class UserManager(BaseUserManager):
@@ -33,7 +34,8 @@ class User(AbstractUser):
     date_joined = None
     groups = None
 
-    user_id = models.CharField(max_length=32, verbose_name="ユーザーID", unique=True)
+    # user_idは半角文字とアンダースコアのみ許可
+    user_id = models.CharField(max_length=32, verbose_name="ユーザーID", unique=True, validators=[RegexValidator(slug_re, "半角英数字とアンダースコア,ハイフンのみ使用できます", "invalid")])
     username = models.CharField(max_length=32, verbose_name="ユーザー名")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日時")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日時")
