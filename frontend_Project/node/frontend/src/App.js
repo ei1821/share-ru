@@ -1,49 +1,110 @@
-import React, { Component, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { Component, useState, useLayoutEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { BrowserRouter as Router, Route, Routes, useNavigate, Link } from "react-router-dom";
 import Modal from "./components/Modal";
 import axios from "axios";
+
+import { authActions } from "./stores";
 
 import PrivateRoute from './components/PrivateRoute';
 import Login from './components/Login';
 import Home from './components/Home';
 import Profile from './components/Profile';
 import Signup from "./components/Signup";
+import Todo from "./features/Todo/Todo";
+
+const getToken = (tokenType = "accessToken") => {
+    const token = localStorage.getItem(tokenType);
+    return { Authorization: "JWT " + token };
+}
 
 function App() {
-  const [isAuthenticated, setAuthenticated] = useState(false);
+    const isAuthenticated = useSelector((state) => state.auth.isAuth);
+    const dispatch = useDispatch();
+    const onLogin = () => dispatch(authActions.login());
+    const onLogout = () => dispatch(authActions.logout());
 
-  const handleLogin = () => {
-    // ログイン成功時の処理
-    setAuthenticated(true);
-  };
+    const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // ログアウト処理
-    setAuthenticated(false);
-  };
+    async function refreshToken() {
+        axios.post("/api/auth/jwt/refresh/", {
+            refresh: localStorage.getItem("refreshToken"),
+        })
+            .then(res => {
+                console.log("refresh");
+                localStorage.setItem("accessToken", res.data.access);
+                localStorage.setItem("refreshToken", res.data.refresh);
+                onLogin();
+            })
+            .catch(err => {
+                alert("ログインしてください");
+                onLogout();
 
-  return (
-    <main className="container">
+            });
+        navigate("/login");
+    };
 
-      <h1 className="text-uppercase text-center my-4">Sample app</h1>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login onLogin={handleLogin} />} />
-          <Route path="/profile" element={<PrivateRoute component={Profile} isAuthenticated={isAuthenticated} ></PrivateRoute>}></Route>
-          <Route path="/home" element={<Home />} />
-          <Route path="/signup" element={<Signup />} />
-        </Routes>
-      </Router>
-      <div>
-        <a className="row" href="/">top</a>
-        <a className="row" href="/login">Login</a>
-        <a className="row" href="/signup">Signup</a>
-        <a className="row" href="/profile">Profile</a>
-        <a className="row" href="/home">Home</a>
-      </div>
+    async function verifyToken() {
+        axios.post("/api/auth/jwt/verify/", {
+            token: localStorage.getItem("accessToken"),
+        })
+            .then(res => {
+                console.log("verify");
+                onLogin();
+                navigate("/");
+            })
+            .catch(err => {
+                if (err.response.status === 401) {
+                    refreshToken();
+                }
+            });
+    }
 
-    </main>
-  );
+    useLayoutEffect(() => {
+        console.log("useLayoutEffect");
+        console.log("isAuthenticated: ", isAuthenticated);
+        if (isAuthenticated) {
+            if (localStorage.getItem("accessToken") !== null) {
+                console.log("start verify");
+                verifyToken();
+            }
+            else {
+                console.log("no token");
+                alert("ログインしてください");
+                onLogout();
+                navigate("/login");
+            }
+        }
+    }, []);
+
+
+    return (
+        <main className="container">
+
+            <h1 className="text-uppercase text-center my-4">Sample app</h1>
+
+            <div className="row d-flex justify-content-around">
+                <Link className="col-auto btn btn-primary" to="/">Top</Link>
+                <Link className="col-auto btn btn-primary" to="/profile">Profile</Link>
+                <Link className="col-auto btn btn-primary" to="/todo">Todo</Link>
+                <Link className="col-auto btn btn-primary" to="/login">Login</Link>
+                <Link className="col-auto btn btn-primary" to="/signup">Signup</Link>
+
+            </div>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/todo" element={
+                    <PrivateRoute>
+                        <Todo />
+                    </PrivateRoute>
+                } />
+                // {/* <PrivateRoute path="/profile" element={<Profile />} />
+                // <PrivateRoute path="/todo" element={<Todo />} /> */}
+            </Routes>
+        </main >
+    );
 }
 
 export default App;
