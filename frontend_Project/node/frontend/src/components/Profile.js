@@ -8,16 +8,16 @@ const Profile = () => {
     useEffect(() => {
         // ユーザー情報を取得する処理（仮定）
         // この部分は実際のアプリケーションに合わせて実装する必要があります
-        const fetchUserProfile = async () => {
+        const fetchUserProfile = () => {
             try {
-                ax.get("/api/auth/users/me")
-                .then((res) => {
-                    console.log(res.data);
-                    // setUser(res.data);
-                })
-                .error((err) => {
-                    console.log(err);
-                });
+                ax.get("/api/users/me/")
+                    .then((res) => {
+                        console.log(res.data);
+                        // setUser(res.data);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             } catch (error) {
                 console.error('Error fetching user profile:', error);
             }
