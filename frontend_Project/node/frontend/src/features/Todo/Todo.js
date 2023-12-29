@@ -1,11 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Modal from "../../components/Modal";
-import axios from "axios";
+import ax from "../../api/Axios";
 
-const getToken = (tokenType = "accessToken") => {
-    const token = localStorage.getItem(tokenType);
-    return { Authorization: "JWT " + token };
-}
 
 const Todo = ({ }) => {
     const [viewCompleted, setViewCompleted] = useState(false);
@@ -18,8 +14,8 @@ const Todo = ({ }) => {
     });
     
     const refreshList = () => {
-        axios
-            .get("/api/todos/", {headers: getToken()})
+        ax
+            .get("/api/todos/")
             .then((res) => setTodoList(res.data))
             .catch((err) => console.log(err));
     }
@@ -37,18 +33,18 @@ const Todo = ({ }) => {
         toggle();
 
         if (item.id) {
-            axios
-                .put(`/api/todos/${item.id}/`, item, {headers: getToken()})
+            ax
+                .put(`/api/todos/${item.id}/`, item)
                 .then((res) => refreshList());
             return;
         }
-        axios
-            .post("/api/todos/", item, {headers: getToken()})
+        ax
+            .post("/api/todos/", item)
             .then((res) => refreshList());
     }
 
     const handleDelete = (item) => {
-        axios
+        ax
             .delete(`/api/todos/${item.id}/`)
             .then((res) => refreshList());
     }

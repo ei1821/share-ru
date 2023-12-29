@@ -13,11 +13,6 @@ import Profile from './components/Profile';
 import Signup from "./components/Signup";
 import Todo from "./features/Todo/Todo";
 
-const getToken = (tokenType = "accessToken") => {
-    const token = localStorage.getItem(tokenType);
-    return { Authorization: "JWT " + token };
-}
-
 function App() {
     const isAuthenticated = useSelector((state) => state.auth.isAuth);
     const dispatch = useDispatch();
@@ -95,13 +90,9 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/todo" element={
-                    <PrivateRoute>
-                        <Todo />
-                    </PrivateRoute>
-                } />
-                // {/* <PrivateRoute path="/profile" element={<Profile />} />
-                // <PrivateRoute path="/todo" element={<Todo />} /> */}
+                <Route path="/todo" element={<PrivateRoute><Todo /></PrivateRoute>} />
+                <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+
             </Routes>
         </main >
     );
