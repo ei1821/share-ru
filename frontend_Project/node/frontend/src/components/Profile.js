@@ -1,6 +1,6 @@
 // src/components/Profile.js
 import React, { useEffect, useState } from 'react';
-import ax from '../api/Axios';
+import ax, {getToken} from '../api/Axios';
 
 const Profile = () => {
     const [user, setUser] = useState(null);

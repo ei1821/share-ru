@@ -58,18 +58,18 @@ function App() {
     useLayoutEffect(() => {
         console.log("useLayoutEffect");
         console.log("isAuthenticated: ", isAuthenticated);
-        if (isAuthenticated) {
-            if (localStorage.getItem("accessToken") !== null) {
-                console.log("start verify");
-                verifyToken();
-            }
-            else {
-                console.log("no token");
-                alert("ログインしてください");
-                onLogout();
-                navigate("/login");
-            }
+        // if (isAuthenticated) {
+        if (localStorage.getItem("accessToken") !== null) {
+            console.log("start verify");
+            verifyToken();
         }
+        else {
+            console.log("no token");
+            alert("ログインしてください");
+            onLogout();
+            navigate("/login");
+        }
+        // }
     }, []);
 
 
