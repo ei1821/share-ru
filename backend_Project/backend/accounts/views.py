@@ -25,6 +25,5 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             serializer = UserSerializer(request.user)
             return Response(serializer.data)    
         else:
-            # 仮にid=1のユーザーを返す
-            serializer = UserSerializer(User.objects.get(id=1))
-            return Response(serializer.data)
+            return Response(status=HTTP_400_BAD_REQUEST)
+        
