@@ -9,6 +9,7 @@ router = routers.DefaultRouter()
 router.register(r'todos', views.TodoView, 'todo')
 router.register(r'users', UserViewSet, "users")
 router.register(r'items', ItemViewSet, "items")
+router.register(r'owned-items', OwnedItemViewSet, "owneditems")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

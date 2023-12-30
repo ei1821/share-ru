@@ -16,5 +16,3 @@ class OwnedItemSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Item
 #         fields = '__all__'
-        
-        

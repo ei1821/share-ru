@@ -12,6 +12,7 @@ import Home from './components/Home';
 import Profile from './components/Profile';
 import Signup from "./components/Signup";
 import Todo from "./features/Todo/Todo";
+import UserItem from "./features/UserItem/UserItem";
 
 function App() {
     const isAuthenticated = useSelector((state) => state.auth.isAuth);
@@ -84,7 +85,7 @@ function App() {
                 <Link className="col-auto btn btn-primary" to="/todo">Todo</Link>
                 <Link className="col-auto btn btn-primary" to="/login">Login</Link>
                 <Link className="col-auto btn btn-primary" to="/signup">Signup</Link>
-
+                <Link className="col-auto btn btn-primary" to="/useritem">UserItem</Link>
             </div>
             <Routes>
                 <Route path="/" element={<Home />} />
@@ -92,7 +93,7 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/todo" element={<PrivateRoute><Todo /></PrivateRoute>} />
                 <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-
+                <Route path="/useritem" element={<PrivateRoute><UserItem /></PrivateRoute>} />
             </Routes>
         </main >
     );
