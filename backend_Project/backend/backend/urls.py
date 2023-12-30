@@ -3,10 +3,12 @@ from django.urls import path, include
 from rest_framework import routers
 from todo import views
 from accounts.views import UserViewSet
+from items.views import ItemViewSet, OwnedItemViewSet
 
 router = routers.DefaultRouter()
 router.register(r'todos', views.TodoView, 'todo')
 router.register(r'users', UserViewSet, "users")
+router.register(r'items', ItemViewSet, "items")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     'djoser',
     "todo",
-    "accounts.apps.AccountsConfig",
     # "accounts",
+    "accounts.apps.AccountsConfig",
+    "items",
+    # "items.apps.ItemsConfig",
 ]
 
 MIDDLEWARE = [
