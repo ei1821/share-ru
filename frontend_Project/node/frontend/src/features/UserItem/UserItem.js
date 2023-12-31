@@ -8,7 +8,7 @@ const UserItem = ({ }) => {
 
     const refreshList = () => {
         ax
-            .get("/api/owned-items/")
+            .get("/api/users/me/items/")
             .then((res) => {
                 console.log(res.data);
                 setItemList(res.data);
